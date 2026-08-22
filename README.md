@@ -100,9 +100,3 @@ No passwords, API keys, or sensitive credentials are included in this repository
 
 **Akash Karmakar**
 
-* GitHub: `https://github.com/your-username`
-* LinkedIn: `https://linkedin.com/in/your-profile`
-
----
-
-⭐ If you find this project useful, consider giving the repository a star!
