@@ -4,7 +4,7 @@ An interactive **Power BI dashboard** built to analyze India’s healthcare data
 
 ##  Dashboard Preview
 
-![Indian Healthcare Analysis Dashboard](./Screenshot/Indian%20Healthcare%20Analysis%202026.png)
+![Indian Healthcare Analysis Dashboard](https://github.com/Mysterious-Magici/INDIAN-HEALTHCARE-DATA-ANALYSIS-2026/blob/main/Apnar%20Swasthya%20%E2%80%94%20Healthcare%20Analytics%20Dashboard%20Screenshot.png)
 
 
 
