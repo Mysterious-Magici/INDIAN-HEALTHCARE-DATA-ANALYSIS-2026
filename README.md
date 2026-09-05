@@ -1,42 +1,108 @@
-#  Indian Healthcare Analysis 2026
-
-An interactive **Power BI dashboard** built to analyze India’s healthcare data and understand patient access, hospital performance, recovery, and regional healthcare trends.
-
-##  Dashboard Preview
-
-![Indian Healthcare Analysis Dashboard](https://github.com/Mysterious-Magici/INDIAN-HEALTHCARE-DATA-ANALYSIS-2026/blob/main/Apnar%20Swasthya%20%E2%80%94%20Healthcare%20Analytics%20Dashboard%20Screenshot.png)
+# INDIAN-HEALTHCARE-DATA-ANALYSIS-2026
 
 
+# MySQL Database Project
 
-##  Key Insights
+## 📌 Overview
 
-*  Total Patients & Patient Demographics
-*  Hospital Performance Analysis
-*  Recovery Rate Analysis
-*  State-wise Healthcare Trends
-*  Patient Access & Healthcare Distribution
+This project contains a structured **MySQL database** designed for data storage, management, and SQL-based analysis. The database includes tables, relationships, and data that can be imported directly into MySQL for further analysis.
 
-##  Tools & Technologies
-
-**Power BI • Power Query • DAX • MySQL • Excel/CSV**
-
-##  Project Structure
+## 🗂️ Project Structure
 
 ```text
-INDIAN-HEALTHCARE-ANALYSIS-2026/
+MySQL-Database/
 │
-├── INDIAN HEALTHCARE ANALYSIS 2026.pbix
-├── Screenshot/
-│   └── Indian Healthcare Analysis 2026.png
-├── Data/
-└── SQL/
+├── database/
+│   └── database.sql
+│
+├── queries/
+│   └── analysis.sql
+│
+├── README.md
+└── .gitignore
 ```
 
-##  Project Objective
+## 🛠️ Technologies Used
 
-The goal of this project is to transform healthcare data into **simple, meaningful, and interactive insights** that help understand healthcare delivery and patient trends across India.
+* **MySQL**
+* **MySQL Workbench**
+* **SQL**
+* **Git & GitHub**
+
+## 📊 Database Features
+
+* Structured relational database
+* Multiple interconnected tables
+* Primary & foreign key relationships
+* Data storage and retrieval
+* SQL-based data analysis
+* Filtering, sorting, grouping, and aggregation
+* JOIN-based analysis
+* Business insights using SQL queries
+
+## 🚀 How to Use
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/your-repository.git
+cd your-repository
+```
+
+### 2. Create a Database
+
+Open MySQL Workbench and create a database:
+
+```sql
+CREATE DATABASE database_name;
+USE database_name;
+```
+
+### 3. Import the SQL File
+
+Run:
+
+```bash
+mysql -u root -p database_name < database/database.sql
+```
+
+Or import `database.sql` using:
+
+**MySQL Workbench → Server → Data Import → Import from Self-Contained File**
+
+### 4. Run SQL Queries
+
+After importing the database, execute the queries available in the `queries/` folder.
+
+## 🔍 Sample SQL Analysis
+
+```sql
+SELECT 
+    category,
+    COUNT(*) AS total_records
+FROM table_name
+GROUP BY category
+ORDER BY total_records DESC;
+```
+
+## 📈 Key Outcomes
+
+* Successfully stored and structured the dataset in MySQL.
+* Created a reusable SQL database for analytical queries.
+* Performed data exploration using SQL.
+* Generated meaningful insights using aggregation and relational queries.
+
+## 🔐 Security
+
+No passwords, API keys, or sensitive credentials are included in this repository.
 
 ## 👨‍💻 Author
 
 **Akash Karmakar**
-Data Analyst | Power BI | SQL | Python
+
+* GitHub: `https://github.com/your-username`
+* LinkedIn: `https://linkedin.com/in/your-profile`
+
+---
+
+⭐ If you find this project useful, consider giving the repository a star!

@@ -1,0 +1,119 @@
+# SQL Practice Questions — Patient Visit Records Dataset
+
+**Prepared by:** Data Analyst
+**Dataset:** `new_data_cleaned_excel.xlsx` → assume loaded into a table named **`patient_visits`**
+**Scope:** ~100,000 rows | 39 columns
+**Domain:** Healthcare — patient demographics, diagnosis, treatment, and outcomes
+
+---
+
+## 1. Dataset Overview
+
+The source file is a single **wide, denormalized** table. Key columns include:
+
+| Category | Columns |
+|---|---|
+| Patient Info | `Patient_ID`, `Age`, `Gender`, `State`, `Socioeconomic_Status`, `Occupation` |
+| Visit Info | `Visit_Date`, `Visit_Year`, `Visit_Month`, `Age_Group` |
+| Clinical | `Symptoms`, `Primary_Diagnosis`, `Fasting_Blood_Glucose__mg_dl`, `Glycemic_Status`, `HbA1c_mmol_mol`, `Total_Cholesterol_mg_dL`, `BMI_kg_meter_square`, `BMI_Status` |
+| Treatment | `Treatment_Type`, `Treatment_Outcome` |
+| Diagnostics | `Imaging_Type`, `Imaging_Findings` |
+| Facility | `Hospital_Type`, `Insurance_Covered` |
+| Symptom Flags (one-hot) | `Symptom_Blurred_Vision`, `Symptom_Chest_Pain`, `Symptom_Cough`, `Symptom_Fatigue`, `Symptom_Fever`, `Symptom_Frequent_Urination`, `Symptom_Headache`, `Symptom_High_Bp`, `Symptom_High_Fever`, `Symptom_Increased_Thirst`, `Symptom_Joint_Pain`, `Symptom_Night_Sweats`, `Symptom_Shortness_Of_Breath`, `Symptom_Swelling_In_Legs`, `Symptom_Weight_Loss` |
+
+This structure — one row per visit, repeating patient/hospital attributes, and 14 flag columns instead of a related table — makes it an excellent case study for **normalization and schema decomposition**, in addition to standard query practice.
+
+---
+
+## 2. Basic Level — Retrieval & Filtering
+
+1. Retrieve all columns for the first 10 patient visit records.
+2. List distinct values of `Primary_Diagnosis` present in the dataset.
+3. Find all visits where the `Hospital_Type` is `'Government'`.
+4. Retrieve `Patient_ID`, `Age`, and `Gender` for patients aged above 60.
+5. List all visits from the state `'West Bengal'`, sorted by `Visit_Date` in descending order.
+6. Find all records where `Insurance_Covered` is `'Not Covered'`.
+7. Retrieve all visits that occurred in the year 2025.
+8. Find patients whose `BMI_Status` is `'Obesity'`.
+9. List all distinct `Treatment_Type` values used in the dataset.
+10. Retrieve all visits where `Treatment_Outcome` is either `'Recovered'` or `'Improved'`.
+
+---
+
+## 3. Intermediate Level — Aggregation, Grouping & Conditional Logic
+
+11. Count the total number of visits recorded per `State`.
+12. Find the average `Age` of patients for each `Primary_Diagnosis`.
+13. Determine the number of patients per `Gender` for each `Hospital_Type`.
+14. Find the most common `Primary_Diagnosis` overall (highest visit count).
+15. Calculate the average `Total_Cholesterol_mg_dL` grouped by `BMI_Status`.
+16. List diagnoses that have more than 5,000 recorded visits (use `HAVING`).
+17. Using `CASE WHEN`, classify patients into `'Minor'` (<18), `'Adult'` (18–59), and `'Senior'` (60+), then count patients in each group.
+18. Find the percentage of visits per `Treatment_Outcome` out of total visits.
+19. Determine which `Occupation` has the highest average `HbA1c_mmol_mol` level.
+20. For each `State`, find the count of visits where `Insurance_Covered = 'Covered'` versus `'Not Covered'`.
+21. Find the month (`Visit_Month`) with the highest number of visits, year over year.
+22. List the top 5 `Primary_Diagnosis` values by average `Fasting_Blood_Glucose__mg_dl`.
+
+---
+
+## 4. Advanced Level — Joins, Subqueries, CTEs & Window Functions
+
+*(Assume the table has been decomposed per Section 6 into `patients`, `visits`, `diagnoses`, `symptoms`, `visit_symptoms`, `treatments`, `hospitals` — these queries reference that normalized structure.)*
+
+23. Write a query using a **CTE** to find, for each `State`, the diagnosis with the highest number of cases (top diagnosis per state).
+24. Using a **window function** (`RANK()` or `DENSE_RANK()`), rank patients within each `Primary_Diagnosis` group by `HbA1c_mmol_mol` in descending order.
+25. Write a query to find the **running total** of visits per month, ordered chronologically, using `SUM() OVER (ORDER BY ...)`.
+26. Using `LAG()`/`LEAD()`, find patients who had more than one visit and compare the `Treatment_Outcome` of their current visit to their previous visit.
+27. Write a **correlated subquery** to find patients whose `Total_Cholesterol_mg_dL` is above the average cholesterol for their own `Age_Group`.
+28. Using a **self-join** (or `EXISTS`), identify patients who have visited more than one `Hospital_Type` (e.g., both Government and Private).
+29. Write a query using `JOIN` across the decomposed schema to list each visit with the patient's demographic details, diagnosis name, and all associated symptoms (comma-separated using `STRING_AGG`/`GROUP_CONCAT`).
+30. Using a **CTE + window function**, identify the top 3 most common symptoms associated with each `Primary_Diagnosis`.
+31. Write a query to compute **month-over-month percentage change** in visit counts using `LAG()`.
+32. Find patients whose `BMI_Status` changed between consecutive visits (requires self-join on `Patient_ID` ordered by `Visit_Date`).
+33. Using `PIVOT`-style aggregation (`CASE WHEN` + `SUM`), transform `Treatment_Outcome` values into columns showing counts per `State`.
+34. Write a query to detect potential **duplicate patient records** (same `Age`, `Gender`, `State`, `Occupation` but different `Patient_ID`) using `GROUP BY` and `HAVING COUNT(*) > 1`.
+
+---
+
+## 5. Normalization — Conceptual & Applied Questions
+
+35. Identify which **Normal Form** the current flat `patient_visits` table violates, and explain why (consider repeating groups in the `Symptoms` column and one-hot symptom flags).
+36. Explain why the 14 `Symptom_*` binary columns represent a violation of **First Normal Form (1NF)** — atomicity of values/repeating groups — and how they should be restructured.
+37. Identify partial dependencies in the dataset if `(Patient_ID, Visit_Date)` were used as a composite key — which attributes depend only on `Patient_ID` and not on `Visit_Date`? (**2NF** check)
+38. Identify transitive dependencies — e.g., does `BMI_Status` depend on `BMI_kg_meter_square` rather than directly on the visit? Does `Glycemic_Status` depend on `Fasting_Blood_Glucose__mg_dl`? Explain the **3NF** violation.
+39. Propose a **3NF-compliant** entity-relationship design for this dataset, listing each table, its primary key, and its foreign keys.
+40. Explain whether `Hospital_Type` and `State` should be extracted into a separate `hospitals` reference table, and justify using normalization rules.
+41. Discuss whether full **BCNF (Boyce-Codd Normal Form)** compliance is necessary here, or whether 3NF is sufficient for analytical reporting purposes — justify your reasoning.
+
+---
+
+## 6. Decomposition — Schema Design & Migration SQL
+
+42. Design and write `CREATE TABLE` statements to decompose `patient_visits` into the following normalized tables:
+    - `patients` (`Patient_ID` PK, `Age`, `Gender`, `State`, `Socioeconomic_Status`, `Occupation`)
+    - `hospitals` (`Hospital_ID` PK, `Hospital_Type`)
+    - `diagnoses` (`Diagnosis_ID` PK, `Diagnosis_Name`)
+    - `symptoms` (`Symptom_ID` PK, `Symptom_Name`)
+    - `visits` (`Visit_ID` PK, `Patient_ID` FK, `Hospital_ID` FK, `Diagnosis_ID` FK, `Visit_Date`, `Insurance_Covered`, clinical measures)
+    - `visit_symptoms` (`Visit_ID` FK, `Symptom_ID` FK — resolves the many-to-many relationship, replacing the 14 flag columns)
+    - `treatments` (`Treatment_ID` PK, `Visit_ID` FK, `Treatment_Type`, `Treatment_Outcome`)
+    - `imaging` (`Imaging_ID` PK, `Visit_ID` FK, `Imaging_Type`, `Imaging_Findings`)
+43. Write an `INSERT INTO ... SELECT DISTINCT` script to populate the `diagnoses` lookup table from the distinct `Primary_Diagnosis` values in `patient_visits`.
+44. Write a migration query using `UNPIVOT` (or `UNION ALL` of `CASE WHEN` selects) to convert the 14 `Symptom_*` flag columns into rows in `visit_symptoms`.
+45. Write a query to populate `visits` by joining the natural-keyed source data to the new surrogate keys in `patients`, `hospitals`, and `diagnoses`.
+46. After decomposition, write a `JOIN` query that **reconstructs** the original flat view (a denormalized reporting view) — proving no information was lost during decomposition (a lossless-join check).
+47. Write a query to verify **referential integrity** post-migration: find any `visit_symptoms` rows referencing a `Visit_ID` that doesn't exist in `visits`.
+48. Discuss the trade-off between the normalized schema (Section 6) and the original flat table for (a) transactional data entry vs. (b) analytical/BI reporting, and explain when you would **denormalize** the schema back into a reporting table or materialized view.
+
+---
+
+## 7. Suggested Approach
+
+- Attempt Sections 2–3 directly against the flat `patient_visits` table.
+- For Sections 4 and 6, first execute the `CREATE TABLE` and migration statements from Question 42–45 to stand up the normalized schema, then run the advanced queries against it.
+- Use Section 5 as a written/conceptual exercise — answers should reference specific columns from the dataset, not generic normalization theory.
+
+---
+
+*End of question set.*
